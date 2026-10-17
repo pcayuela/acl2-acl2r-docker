@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Runs acl2r from the acl2-pcayuela image.
+# The current directory is mounted at the SAME absolute path inside the
+# container, so absolute host paths work.  Extra directories can be added with
+# ACL2_DOCKER_MOUNTS="/path/a:/path/b".  Runs as the calling user so files that
+# ACL2 writes (.cert, .fasl, ...) belong to you.  Usable as ACL2_MCP_EXECUTABLE
+# or --acl2-path.
+IMG="${ACL2_DOCKER_IMAGE:-acl2-pcayuela}"
+args=(run --rm -it --user "$(id -u):$(id -g)" -e HOME=/tmp
+      -v "$PWD":"$PWD" -w "$PWD")
+IFS=: read -ra extra <<< "${ACL2_DOCKER_MOUNTS:-}"
+for d in "${extra[@]}"; do [ -n "$d" ] && args+=(-v "$d":"$d"); done
+args+=("$IMG" acl2r "$@")
+if docker info >/dev/null 2>&1; then exec docker "${args[@]}"
+else exec sg docker -c "$(printf '%q ' docker "${args[@]}")"; fi
