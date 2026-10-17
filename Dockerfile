@@ -4,7 +4,7 @@
 # author's verification projects need already certified, so nothing has to
 # be recertified after pulling the image.
 #
-#   /opt/acl2   plain ACL2   (saved_acl2,  books certified for arithmetic-5/top)
+#   /opt/acl2   plain ACL2   (saved_acl2,  books certified for arithmetic-5/top, arithmetic/top-with-meta, arithmetic-3/top)
 #   /opt/acl2r  ACL2(r)      (saved_acl2r, books certified for nonstd/nsa/trig,
 #                             nsa and the reid-gamboa-differentiator support books)
 #
@@ -46,7 +46,7 @@ ENV ACL2_SNAPSHOT_INFO="git commit ${ACL2_COMMIT}"
 COPY --from=sbcl /usr/local /usr/local
 COPY --from=src /opt/acl2 /opt/acl2
 ARG JOBS=4
-ARG PLAIN_BOOKS="arithmetic-5/top"
+ARG PLAIN_BOOKS="arithmetic-5/top arithmetic/top-with-meta arithmetic-3/top"
 RUN cd /opt/acl2 && make LISP=sbcl || { cat make.log; exit 1; }
 RUN cd /opt/acl2/books && make ACL2=/opt/acl2/saved_acl2 build/Makefile-features \
     && build/cert.pl --acl2 /opt/acl2/saved_acl2 -j ${JOBS} ${PLAIN_BOOKS}

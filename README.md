@@ -16,7 +16,7 @@ ACL2 engine behind MCP servers such as
 |---|---|---|
 | Location | `/opt/acl2` | `/opt/acl2r` |
 | Executable | `acl2` → `/opt/acl2/saved_acl2` | `acl2r` → `/opt/acl2r/saved_acl2r` |
-| Certified books | `arithmetic-5/top` | `arithmetic-5/top`, `nonstd/nsa/nsa`, `nonstd/nsa/trig`, and the `reid-gamboa-differentiator` support books (`exp-minimal`, `differentiator`) |
+| Certified books | `arithmetic-5/top`, `arithmetic/top-with-meta`, `arithmetic-3/top` | `arithmetic-5/top`, `nonstd/nsa/nsa`, `nonstd/nsa/trig`, and the `reid-gamboa-differentiator` support books (`exp-minimal`, `differentiator`) |
 
 Both use ACL2 commit `4cab4f162b44fd6f01b8a3fb2e3d39be57ee2a3f` (ACL2 8.7) and
 SBCL 2.6.5, built from source on Ubuntu 24.04.
