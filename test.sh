@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Smoke-test both executables in the image: load certified books and prove one
-# theorem each. Usage: ./test.sh [image]
+# theorem each. Usage: ./test.sh [image]   (default: the published ghcr.io image)
 set -euo pipefail
-IMG="${1:-acl2-pcayuela}"
+IMG="${1:-ghcr.io/pcayuela/acl2-acl2r-docker:8.7}"
 if docker info >/dev/null 2>&1; then DOCKER=(docker); else DOCKER=(sg docker -c); fi
 run() {
   if [ "${DOCKER[0]}" = docker ]; then docker run --rm -i "$IMG" "$@"

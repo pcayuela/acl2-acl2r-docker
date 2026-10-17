@@ -32,6 +32,19 @@ keeps the image at about 4.6 GB and the build short. To add books, extend
 `PLAIN_BOOKS` / `REAL_BOOKS` in the `Dockerfile` (they are space-separated
 `cert.pl` targets, relative to `books/`).
 
+## Get the image
+
+A prebuilt image is published on GitHub Container Registry (no build needed):
+
+```bash
+docker pull ghcr.io/pcayuela/acl2-acl2r-docker:8.7     # also tagged :latest
+docker run --rm -it ghcr.io/pcayuela/acl2-acl2r-docker:8.7 acl2r
+```
+
+The scripts in this repository (`test.sh`, `verify-project.sh`, `acl2-docker`,
+`acl2r-docker`) use that image by default; pass another image name (argument or
+`ACL2_DOCKER_IMAGE`) to use one you built yourself.
+
 ## Build and test
 
 ```bash
@@ -85,7 +98,8 @@ claude mcp add acl2r-docker \
 - Each MCP session starts a fresh, throw-away container (`--rm`): in-memory
   definitions are lost when the session ends, as with a local ACL2. Files written
   to mounted directories persist.
-- Image name defaults to `acl2-pcayuela`; override with `ACL2_DOCKER_IMAGE`.
+- The image defaults to `ghcr.io/pcayuela/acl2-acl2r-docker:8.7`; override with
+  `ACL2_DOCKER_IMAGE` (for example `acl2-pcayuela`, a local build).
 
 Tested with the full `acl2-mcp` server (plain ACL2 and ACL2(r)) and with the
 minimal `acl2r-mcp` server.

@@ -8,7 +8,7 @@
 # container.  The project directory itself is never modified.
 set -euo pipefail
 proj="${1:?project directory}"; flavor="${2:?plain|real}"; top="${3:?top book (no .lisp)}"
-IMG="${4:-acl2-pcayuela}"
+IMG="${4:-ghcr.io/pcayuela/acl2-acl2r-docker:8.7}"
 case "$flavor" in
   plain) acl2=/opt/acl2/saved_acl2;  certpl=/opt/acl2/books/build/cert.pl; want="ACL2 Version 8.7" ;;
   real)  acl2=/opt/acl2r/saved_acl2r; certpl=/opt/acl2r/books/build/cert.pl; want="ACL2 Version 8.7(r)" ;;
