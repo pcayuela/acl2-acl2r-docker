@@ -65,6 +65,9 @@ RUN cd /opt/acl2r/books && make ACL2=/opt/acl2r/saved_acl2r build/Makefile-featu
 
 # --- final image ---
 FROM base AS final
+LABEL org.opencontainers.image.source="https://github.com/pcayuela/acl2-acl2r-docker" \
+      org.opencontainers.image.description="ACL2 8.7 and ACL2(r) 8.7 with pre-certified community books" \
+      org.opencontainers.image.licenses="BSD-3-Clause"
 COPY --from=sbcl /usr/local /usr/local
 COPY --from=acl2-plain /opt/acl2 /opt/acl2
 COPY --from=acl2-real /opt/acl2r /opt/acl2r
