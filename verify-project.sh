@@ -18,11 +18,15 @@ tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
 ( cd "$proj" && find . -maxdepth 1 -type f \( -name '*.lisp' -o -name '*.acl2' -o -name '*.lsp' \) -exec cp {} "$tmp"/ \; )
 chmod -R a+rwx "$tmp"
 D=docker; docker info >/dev/null 2>&1 || D="sg docker -c"
-run="$certpl --acl2 $acl2 -j $(nproc) $top"
+# Runs as root inside the container so that system books the project depends on
+# (e.g. kestrel/lists-light/perm), which ship uncertified in the image, can be
+# certified there; the container's copy of /opt/acl2/books is discarded with it.
+# Ownership of the temporary project directory is handed back to the caller.
+run="$certpl --acl2 $acl2 -j $(nproc) $top; rc=\$?; chown -R $(id -u):$(id -g) $tmp; exit \$rc"
 if [ "$D" = docker ]; then
-  docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$tmp":"$tmp" -w "$tmp" "$IMG" bash -c "$run"
+  docker run --rm -e HOME=/tmp -v "$tmp":"$tmp" -w "$tmp" "$IMG" bash -c "$run"
 else
-  sg docker -c "docker run --rm --user $(id -u):$(id -g) -e HOME=/tmp -v '$tmp':'$tmp' -w '$tmp' $IMG bash -c '$run'"
+  sg docker -c "docker run --rm -e HOME=/tmp -v '$tmp':'$tmp' -w '$tmp' $IMG bash -c '$run'"
 fi
 got="$(head -c 400 "$tmp/$top.cert" | grep -a -o 'ACL2 Version [0-9.()r]*' | head -1)"
 [ "$got" = "$want" ] || { echo "FAIL: certificate says '$got', expected '$want'"; exit 1; }
