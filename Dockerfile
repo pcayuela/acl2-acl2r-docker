@@ -58,7 +58,7 @@ ENV ACL2_SNAPSHOT_INFO="git commit ${ACL2_COMMIT}"
 COPY --from=sbcl /usr/local /usr/local
 COPY --from=src /opt/acl2 /opt/acl2r
 ARG JOBS=4
-ARG REAL_BOOKS="arithmetic-5/top nonstd/nsa/nsa nonstd/nsa/trig nonstd/workshops/2011/reid-gamboa-differentiator/support/exp-minimal nonstd/workshops/2011/reid-gamboa-differentiator/support/differentiator"
+ARG REAL_BOOKS="arithmetic-5/top nonstd/nsa/nsa nonstd/nsa/trig nonstd/workshops/2011/reid-gamboa-differentiator/support/exp-minimal nonstd/workshops/2011/reid-gamboa-differentiator/support/differentiator nonstd/integrals/ftc-2 nonstd/workshops/2011/reid-gamboa-differentiator/support/sin-cos-minimal"
 RUN cd /opt/acl2r && make large-acl2r LISP=sbcl || { cat make.log; exit 1; }
 RUN cd /opt/acl2r/books && make ACL2=/opt/acl2r/saved_acl2r build/Makefile-features \
     && build/cert.pl --acl2 /opt/acl2r/saved_acl2r -j ${JOBS} ${REAL_BOOKS}
